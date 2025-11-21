@@ -1,20 +1,7 @@
-Project Go Five (User Management System)
+ProjectGoFive
 
-เว็ปไซต์บริหารจัดการผู้ใช้งาน (User Management System) แบบ Full-Stack พัฒนาด้วย Angular, .NET Core Web API, และ SQL Server บน Docker
+เว็ปไซต์บริหารจัดการผู้ใช้งาน
 
-🛠️ Tech Stack
-
-Frontend: Angular 20+, Tailwind CSS, Angular Material
-Backend: .NET Core 9.0 (Web API), Entity Framework Core
-Database: Microsoft SQL Server (Running in Docker)
-Tools: Docker, Docker Compose, Postman
-
-📋 Prerequisites (สิ่งที่ต้องมีก่อน)
-ก่อนเริ่มรันโปรเจกต์ ต้องติดตั้งโปรแกรมเหล่านี้ในเครื่อง:
-Node.js (v18+)
-.NET SDK (v9.0)
-Docker Desktop (จำเป็นต้องเปิดทิ้งไว้)
-Git
 ทำตามขั้นตอนทีละสเต็ปเพื่อรันโปรเจกต์:
 
 1. Clone Project
@@ -22,22 +9,18 @@ Git
 git clone [https://github.com/witchaphon112/projectgofive.git](https://github.com/witchaphon112/projectgofive.git)
 cd projectgofive
 
-2. Start Database (Docker)
-   รันคำสั่งนี้ที่โฟลเดอร์หลัก (projectgofive/) เพื่อจำลอง Database Server:
-   docker compose up -d
-   รอจนกว่า Container mssql_backend_db จะขึ้นสถานะ "Up" (เช็คด้วย docker ps)
-
-3. Backend (.NET API)
+2. Backend (.NET API)
    เปิด Terminal ใหม่ แล้วเข้าไปที่โฟลเดอร์ backend:
    cd backend
-   สร้างฐานข้อมูล (Migration):
    dotnet ef database update
 
 รัน Backend Server:
+เชื่อมกับ AWS แล้ว เเต่ดึงข้อมูลapi จะช้านิดหน่อย
 dotnet run
+ระวังมัน มันerror เพราะโหลดไฟล์มา xattr -cr . แก้
 Backend API: http://localhost:5001
 
-4. Frontend (Angular)
+3. Frontend (Angular)
    เปิด Terminal อีกตัว แล้วเข้าไปที่โฟลเดอร์ frontend:
    cd frontend
 
