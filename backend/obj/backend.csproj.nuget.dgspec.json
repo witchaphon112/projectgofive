@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/witchayuen./Documents/projectgofive/backend/backend.csproj": {}
+    "/Users/witchayuen./Documents/projectgofive/projectgofive/backend/backend.csproj": {}
   },
   "projects": {
-    "/Users/witchayuen./Documents/projectgofive/backend/backend.csproj": {
+    "/Users/witchayuen./Documents/projectgofive/projectgofive/backend/backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/witchayuen./Documents/projectgofive/backend/backend.csproj",
+        "projectUniqueName": "/Users/witchayuen./Documents/projectgofive/projectgofive/backend/backend.csproj",
         "projectName": "backend",
-        "projectPath": "/Users/witchayuen./Documents/projectgofive/backend/backend.csproj",
+        "projectPath": "/Users/witchayuen./Documents/projectgofive/projectgofive/backend/backend.csproj",
         "packagesPath": "/Users/witchayuen./.nuget/packages/",
-        "outputPath": "/Users/witchayuen./Documents/projectgofive/backend/obj/",
+        "outputPath": "/Users/witchayuen./Documents/projectgofive/projectgofive/backend/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/witchayuen./.nuget/NuGet/NuGet.Config"

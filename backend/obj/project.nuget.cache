@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "iWZ9X71Co3I=",
+  "dgSpecHash": "0U6mc0sMd/I=",
   "success": true,
-  "projectFilePath": "/Users/witchayuen./Documents/projectgofive/backend/backend.csproj",
+  "projectFilePath": "/Users/witchayuen./Documents/projectgofive/projectgofive/backend/backend.csproj",
   "expectedPackageFiles": [
     "/Users/witchayuen./.nuget/packages/automapper/12.0.1/automapper.12.0.1.nupkg.sha512",
     "/Users/witchayuen./.nuget/packages/automapper.extensions.microsoft.dependencyinjection/12.0.1/automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
