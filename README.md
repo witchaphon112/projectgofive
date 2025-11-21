@@ -10,11 +10,8 @@ git clone [https://github.com/witchaphon112/projectgofive.git](https://github.co
 cd projectgofive
 
 ## 2. Backend (.NET API)
+
 เปิด Terminal ใหม่ แล้วเข้าไปที่โฟลเดอร์ backend:
-
-cd backend
-
-dotnet ef database update
 
 รัน Backend Server:
 
@@ -43,6 +40,7 @@ ng serve
 เปิดเว็บได้ที่: http://localhost:4200
 
 ## สิทธิ์การใช้งาน (Description)
+
 Super Admin
 
 username: Super
@@ -59,7 +57,6 @@ password: 012323
 
 ทำได้ทุกอย่าง ยกเว้นการจัดการ User
 
-
 Employee
 
 username: Employee
@@ -75,4 +72,3 @@ username: ADminhr
 password: 012323
 
 ทำได้แค่ดูข้อมูลต่างๆ
-
