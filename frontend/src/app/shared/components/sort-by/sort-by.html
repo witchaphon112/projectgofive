@@ -1,0 +1,30 @@
+<div class="relative inline-block text-left">
+    <button (click)="toggleDropdown()" 
+          class="flex items-center hover:bg-gray-100 py-2 px-3 rounded-lg text-sm text-gray-600 font-medium transition-colors border border-transparent focus:border-gray-200 focus:outline-none">
+    
+    <span class="mr-1">{{ selectedLabel() }}</span>
+    
+    <mat-icon class="text-[12px] !w-4 !h-4 leading-none flex items-center justify-center overflow-hidden transition-transform duration-200"
+              [class.rotate-180]="isOpen()">
+      keyboard_arrow_down
+    </mat-icon>
+  </button>
+
+  @if (isOpen()) {
+    <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 z-50 py-1 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+      
+      @for (option of options; track option.value) {
+        <button (click)="selectOption(option)"
+                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-[#0794FF] transition-colors">
+          {{ option.label }}
+        </button>
+      }
+
+    </div>
+  }
+
+  @if (isOpen()) {
+    <div (click)="isOpen.set(false)" class="fixed inset-0 z-40 bg-transparent cursor-default"></div>
+  }
+
+</div>

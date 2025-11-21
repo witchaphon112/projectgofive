@@ -1,0 +1,100 @@
+<nav class="px-6 border-gray-200   relative z-50">
+  
+  <div class="flex justify-between items-center h-20">
+    
+    <div class="flex flex-col">
+      <span class="text-2xl  text-black-1000">
+        Hello, {{ currentUser?.firstName }}
+      </span>
+      <span class="text-sm text-gray-500">Have a nice day</span>
+    </div>
+    
+    <div class="flex items-center space-x-4">
+      
+      <div class="relative">
+        
+        <button (click)="toggleNotification()" 
+                class="relative p-2 text-black hover:bg-gray-100 rounded-full transition-colors outline-none">
+          <mat-icon class="text-black">notifications</mat-icon>
+          
+          <span *ngIf="unreadCount > 0" 
+            class="absolute top-2 right-2 block h-2.5 w-2.5 rounded-full bg-blue-600 ring-2 ring-white">
+      </span>
+    </button>
+
+        <div *ngIf="isNotificationOpen" 
+             class="absolute right-0 top-full mt-3 w-80 bg-white rounded-xl shadow-2xl py-0 z-50 border border-gray-100 ring-1 ring-black ring-opacity-5 transform origin-top-right overflow-hidden">
+          
+          <div class="px-4 py-3 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+            <h3 class="text-sm font-bold text-gray-700">การแจ้งเตือน</h3>
+            <span class="text-xs text-blue-600 font-medium bg-blue-50 px-2 py-1 rounded-md">{{ unreadCount }} ข้อความใหม่</span>
+          </div>
+
+          <div class="max-h-80 overflow-y-auto">
+            
+            <ng-container *ngIf="unreadContacts.length > 0; else noMessages">
+              <div *ngFor="let contact of unreadContacts" 
+                   (click)="openChat(contact.id)"
+                   class="flex items-start px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors border-b border-gray-50 last:border-0">
+                
+                <div class="relative flex-shrink-0 mr-3">
+                   <img *ngIf="contact.avatarUrl" [src]="contact.avatarUrl" class="h-10 w-10 rounded-full object-cover border border-gray-200">
+                   <div *ngIf="!contact.avatarUrl" class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-sm border border-indigo-200">
+                      {{ contact.name.charAt(0) }}
+                   </div>
+                   </div>
+
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-bold text-gray-900 truncate">{{ contact.name }}</p>
+                  <p class="text-sm text-gray-600 truncate">{{ contact.lastMessage }}</p>
+                  <p class="text-xs text-gray-400 mt-1">{{ contact.lastActive | date:'shortTime' }}</p> </div>
+
+                <div class="flex-shrink-0 ml-2 flex flex-col items-end justify-center h-full">
+                   <span class="h-2 w-2 bg-blue-600 rounded-full"></span>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-template #noMessages>
+              <div class="flex flex-col items-center justify-center py-8 text-gray-400">
+                <mat-icon class="text-4xl mb-2 text-gray-300">notifications_off</mat-icon>
+                <p class="text-sm">ไม่มีการแจ้งเตือนใหม่</p>
+              </div>
+            </ng-template>
+
+          </div>
+          
+          <div class="bg-gray-50 px-4 py-2 text-center border-t border-gray-100">
+             <button (click)="openChat('')" class="text-xs font-bold text-blue-600 hover:text-blue-800">ดูข้อความทั้งหมด</button>
+          </div>
+
+        </div>
+      </div>
+      <div class="relative flex items-center">
+        <div class="flex items-center space-x-3 border-l pl-5 cursor-pointer select-none" (click)="toggleProfile()">
+            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg border border-blue-200">
+                {{ currentUser?.firstName?.charAt(0) || 'U' }}
+            </div>
+            <div class="flex flex-col text-sm leading-tight">
+              <span class="font-medium text-gray-900">{{ currentUser?.firstName }} {{ currentUser?.lastName }}</span>
+              <span class="text-gray-500 text-xs">{{ currentUser?.roleName || currentUser?.role }}</span>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 text-gray-500 transition-transform duration-200" [class.rotate-180]="isProfileOpen">
+              <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+            </svg>
+        </div>
+        
+        <div *ngIf="isProfileOpen" class="absolute right-0 top-full mt-3 w-48 bg-white rounded-xl shadow-xl py-2 z-50 border border-gray-100 ring-1 ring-black ring-opacity-5 transform origin-top-right transition-all">
+           <button (click)="goToSettings()" class="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#0794FF] transition-colors outline-none">
+                <mat-icon class="text-[20px] mr-3 text-gray-400">person</mat-icon> โปรไฟล์
+            </button>
+            <div class="h-px bg-gray-100 my-1"></div>
+            <button (click)="logout()" class="flex items-center w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors outline-none">
+                <mat-icon class="text-[20px] mr-3 text-gray-400 hover:text-red-500">logout</mat-icon> ออกจากระบบ
+            </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</nav>

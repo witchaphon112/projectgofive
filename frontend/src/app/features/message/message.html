@@ -1,0 +1,122 @@
+<div class="flex flex-col min-h-[calc(100vh-140px)]">
+  <h1 class="text-[28px] font-semibold text-[#0794FF] mb-6">Messages & Inbox</h1>
+
+  <div class="flex h-[calc(100vh-280px)] bg-white rounded-lg shadow-sm overflow-hidden mb-4">
+
+    <div class="w-full md:w-80 border-r border-gray-200 flex flex-col">
+      
+      <div class="p-4 border-b border-gray-100 flex items-center gap-2">
+        <div class="relative flex-1">
+          <app-search-input (searchChange)="onSearchChats($event)"></app-search-input>
+        </div>
+
+        <button (click)="openNewChat()" 
+                class="flex items-center justify-center w-9 h-9 rounded-lg shadow-sm transition-all bg-[#0794FF] hover:bg-[#0575CC] text-white"
+                title="New Chat">
+          <mat-icon class="text-lg">add</mat-icon>
+        </button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto">
+        @for (contact of filteredChatContacts(); track contact.id) {
+          <div (click)="selectChat(contact.id)"
+               [ngClass]="{'bg-blue-50 border-r-4 border-[#0794FF]': contact.id === selectedChatId(), 'hover:bg-gray-50': contact.id !== selectedChatId()}"
+               class="flex items-center p-4 cursor-pointer transition-colors duration-150 border-b border-gray-50">
+            
+            <img [src]="contact.avatarUrl" [alt]="contact.name" class="w-10 h-10 rounded-full object-cover mr-3 bg-gray-200">
+            
+            <div class="flex-1 min-w-0">
+              <div class="flex justify-between items-start">
+                <p class="text-sm font-semibold text-gray-900 truncate">{{ contact.name }}</p>
+                <p class="text-xs text-gray-400 ml-2">{{ contact.lastActive | date: 'shortTime' }}</p>
+              </div>
+              <div class="flex justify-between items-center mt-1">
+                <p class="text-xs text-gray-500 truncate pr-4">{{ contact.lastMessage }}</p>
+                @if (contact.unreadCount > 0) {
+                  <span class="flex items-center justify-center h-4 w-4 bg-red-500 text-white text-[10px] rounded-full font-bold flex-shrink-0">
+                    {{ contact.unreadCount }}
+                  </span>
+                }
+              </div>
+            </div>
+          </div>
+        } @empty {
+          <div class="text-center py-10 text-gray-400 text-sm">
+            @if (searchQuery()) {
+              <mat-icon class="text-4xl text-gray-300 mb-2">search_off</mat-icon>
+              <p>No chats found for "{{ searchQuery() }}"</p>
+              <button 
+                (click)="searchQuery.set('')"
+                class="mt-3 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg text-xs font-medium transition-colors">
+                Clear Search
+              </button>
+            } @else {
+              <mat-icon class="text-4xl text-gray-300 mb-2">chat_bubble_outline</mat-icon>
+              <p>No chats yet.</p>
+              <p class="mt-1">Click "+" to start.</p>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="flex-1 flex flex-col">
+
+      @if (selectedChatId()) {
+        <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-white">
+          <div class="flex items-center">
+            <img [src]="getSelectedContact()?.avatarUrl" class="w-10 h-10 rounded-full object-cover mr-3 bg-gray-200">
+            <div>
+              <p class="text-lg font-semibold text-gray-900">{{ getSelectedContact()?.name }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-1 p-6 space-y-4 overflow-y-auto bg-gray-50">
+          @for (message of messages(); track message.id) {
+            <div class="flex" [ngClass]="{'justify-end': isMyMessage(message.senderId)}">
+              <div class="max-w-xs md:max-w-md lg:max-w-lg">
+                <div class="px-4 py-2 rounded-xl shadow-sm text-sm"
+                     [ngClass]="{
+                       'bg-[#0794FF] text-white rounded-br-none': isMyMessage(message.senderId),
+                       'bg-white text-gray-800 rounded-tl-none': !isMyMessage(message.senderId)
+                     }">
+                  {{ message.content }}
+                </div>
+                <div class="text-[10px] mt-1" 
+                     [ngClass]="{'text-right text-gray-500': isMyMessage(message.senderId), 'text-left text-gray-400': !isMyMessage(message.senderId)}">
+                  {{ message.timestamp | date: 'shortTime' }}
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="p-4 border-t border-gray-100 bg-white">
+          <div class="flex items-center space-x-3">
+            <input #msgInput
+                   type="text" 
+                   placeholder="Type a message..." 
+                   (keyup.enter)="sendMessage(msgInput)"
+                   class="flex-1 py-3 px-4 rounded-full border-2 border-transparent focus:border-[#0794FF] focus:ring-0 text-sm bg-gray-100 text-gray-800">
+            
+            <button (click)="sendMessage(msgInput)"
+                    class="p-2 rounded-full transition-colors cursor-pointer text-[#0794FF] hover:text-[#0575CC]"
+                    title="Send">
+              <mat-icon class="w-6 h-6">send</mat-icon>
+            </button>
+          </div>
+        </div>
+
+      } @else {
+        <div class="flex-1 flex items-center justify-center text-center text-gray-500">
+          <div class="p-8">
+            <mat-icon class="w-12 h-12 text-gray-300 mx-auto mb-4">chat_bubble_outline</mat-icon>
+            <p class="text-lg font-medium">Select a conversation to start chatting.</p>
+            <p class="text-sm mt-1">Or click the "+" button to start a new chat.</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

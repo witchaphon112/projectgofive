@@ -1,0 +1,130 @@
+<div class="flex justify-between items-center px-6 py-4 border-b border-gray-100">
+  <h1 class="text-xl font-bold text-gray-800 m-0">{{ isEditMode ? 'Edit User' : 'Add User' }}</h1>
+  <button mat-icon-button (click)="onCancel()" class="text-gray-500 hover:bg-gray-100 rounded-full transition-colors">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<div mat-dialog-content class="px-6 py-4 max-h-[80vh] overflow-y-auto custom-scrollbar">
+  
+  <form [formGroup]="form" class="space-y-5">
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div>
+        <input type="text" formControlName="firstName" placeholder="First Name *" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+        <div *ngIf="form.get('firstName')?.touched && form.get('firstName')?.invalid" class="text-xs text-red-500 mt-1">
+          กรุณาใส่ชื่อจริง
+        </div>
+      </div>
+      <div>
+        <input type="text" formControlName="lastName" placeholder="Last Name *" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+         <div *ngIf="form.get('lastName')?.touched && form.get('lastName')?.invalid" class="text-xs text-red-500 mt-1">
+          กรุณาใส่นามสกุล
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div>
+        <input type="email" formControlName="email" placeholder="Email ID *" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+        <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid" class="text-xs text-red-500 mt-1">
+           กรุณาใส่อีเมลที่ถูกต้อง
+        </div>
+      </div>
+      <div>
+        <input type="text" formControlName="phone" placeholder="Phone No" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+      </div>
+      <div>
+        <div class="relative">
+          <select formControlName="roleId" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 appearance-none bg-white transition-all cursor-pointer">
+            <option value="" disabled>Select Role Type</option>
+            @for (role of roleOptions; track role.id) {
+              <option [value]="role.id">{{ role.label }}</option>
+            }
+          </select>
+          <mat-icon class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none flex items-center">unfold_more</mat-icon>
+        </div>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div>
+        <input type="text" formControlName="username" placeholder="Username *" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+      </div>
+
+      @if (!isEditMode) {
+        <div>
+          <input type="password" 
+                 formControlName="password" 
+                 placeholder="Password *"
+                 autocomplete="new-password" 
+                 class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+           <div *ngIf="form.get('password')?.touched && form.get('password')?.invalid" class="text-xs text-red-500 mt-1">
+              กรุณาใส่รหัสผ่าน (ขั้นต่ำ 6 ตัว)
+           </div>
+        </div>
+
+        <div>
+          <input type="password" 
+                 formControlName="confirmPassword" 
+                 autocomplete="new-password" 
+                 placeholder="Confirm Password *"
+                 class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+          
+          <div *ngIf="form.errors?.['mismatch'] && form.get('confirmPassword')?.touched" class="text-xs text-red-500 mt-1">
+            รหัสผ่านไม่ตรงกัน
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="mt-8">
+      <div class="grid grid-cols-4 bg-[#EFF4FA] -mx-6 py-3 border-y border-gray-100"> 
+        <div class="text-sm font-semibold text-[#8F9BB3] px-6">Module Permission</div>
+        <div class="text-center text-sm font-semibold text-[#8F9BB3]">Read</div>
+        <div class="text-center text-sm font-semibold text-[#8F9BB3]">Write</div>
+        <div class="text-center text-sm font-semibold text-[#8F9BB3]">Delete</div>
+      </div>
+
+      <div class="space-y-4 pt-4 " formArrayName="permissions">
+        @for (perm of permissionsArray.controls; track $index) {
+            <div [formGroupName]="$index" class="grid grid-cols-4 gap-4 items-center border-b pb-6 border-gray-200 hover:bg-gray-50 py-1 rounded-md transition-colors">            
+            <div class="text-sm text-gray-700 pl-2">
+              {{ perm.value.permissionName }}
+              <input type="hidden" formControlName="permissionId">
+            </div>
+
+            <div class="text-center flex justify-center">
+              <input type="checkbox" formControlName="isReadable" 
+                     class="w-4 h-4 rounded border-gray-300 cursor-pointer transition-all accent-black">
+            </div>
+
+            <div class="text-center flex justify-center">
+              <input type="checkbox" formControlName="isWritable" 
+                     class="w-4 h-4 rounded border-gray-300 cursor-pointer transition-all accent-black">
+            </div>
+
+            <div class="text-center flex justify-center">
+              <input type="checkbox" formControlName="isDeletable" 
+                     class="w-4 h-4 rounded border-gray-300 cursor-pointer transition-all accent-black">
+            </div>
+
+          </div>
+        }
+      </div>
+    </div>
+  
+  </form>
+</div>
+
+<div mat-dialog-actions class="px-6 py-4 flex justify-end items-center space-x-3 border-t border-gray-100 bg-gray-50 rounded-b-xl">
+  <button type="button" 
+          (click)="onSave()" 
+          class="bg-[#0794FF] hover:bg-blue-600 text-white px-6 py-2 rounded-lg text-sm font-medium transition-all shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+      {{ isEditMode ? 'Update User' : 'Add User' }}
+  </button>
+  <button type="button" (click)="onCancel()" class="text-gray-600 hover:bg-gray-200 hover:text-gray-800 px-4 py-2 rounded-lg text-sm font-medium transition-all">
+    Cancel
+  </button>
+  
+</div>

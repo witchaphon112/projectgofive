@@ -1,0 +1,37 @@
+<div class="p-6">
+  <h2 class="text-xl font-bold mb-4">Upload New Photo</h2>
+  <form [formGroup]="form" class="space-y-4">
+    
+    <div>
+      <label class="block text-sm font-medium mb-1">Title</label>
+      <input type="text" 
+             formControlName="title" 
+             [readOnly]="!canWrite"
+             class="w-full border rounded p-2"
+             [ngClass]="{
+               'bg-gray-100 text-gray-400 cursor-not-allowed': !canWrite
+             }">
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1">Select Image</label>
+      <input type="file" 
+             (change)="onFileSelected($event)" 
+             accept=".jpg, .jpeg, .png, image/png, image/jpeg" 
+             [disabled]="!canWrite"
+             class="w-full"
+             [ngClass]="{
+               'opacity-50 cursor-not-allowed': !canWrite
+             }">
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <button (click)="onCancel()" class="px-4 py-2 bg-gray-200 rounded">Cancel</button>
+      <button (click)="onSave()" 
+              [disabled]="form.invalid || !canWrite" 
+              class="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50">
+        Upload
+      </button>
+    </div>
+  </form>
+</div>

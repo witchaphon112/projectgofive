@@ -1,0 +1,40 @@
+<div class="flex flex-col min-h-[calc(100vh-140px)]">
+  <h1 class="text-[28px] font-semibold text-[#0794FF] mb-6">Help Center</h1>
+
+  <div class="flex flex-col md:flex-row items-center mb-6 space-y-4 md:space-y-0 md:space-x-4">
+    <div class="relative w-full md:flex-1">
+      <app-search-input (searchChange)="onSearch($event)"></app-search-input>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-4 w-full">
+    <div class="px-6 py-2 border-gray-200">
+      <h2 class="text-lg text-gray-600 m-0">Frequently Asked Questions</h2>
+      <p class="text-xs text-gray-400">Simple answers to your questions</p>
+    </div>
+
+    <div class="p-6 space-y-3">
+      @for (faq of filteredFaqs(); track faq.question) {
+        <details class="group bg-gray-50 rounded-lg border border-gray-200 cursor-pointer overflow-hidden hover:bg-gray-100 transition-colors">
+          <summary class="flex justify-between items-center font-medium text-gray-800 p-4 list-none">
+            <span>{{ faq.question }}</span>
+            <mat-icon class="text-gray-400 transition-transform group-open:rotate-180">expand_more</mat-icon>
+          </summary>
+          
+          <div class="text-gray-600 text-sm px-4 pb-4 pt-0 border-t border-gray-200 mt-2">
+            <br>
+            {{ faq.answer }}
+          </div>
+        </details>
+      } @empty {
+        <div class="text-center text-gray-400 py-8">
+          <mat-icon class="text-4xl text-gray-300 mb-2">help_outline</mat-icon>
+          <p class="text-sm">No result found.</p>
+        </div>
+      }
+    </div>
+  </div>
+  <div class="text-center text-sm text-gray-500 w-full">
+    Need more help? <span class="text-[#0794FF] font-medium cursor-pointer hover:underline">Contact Admin</span>
+  </div>
+</div>

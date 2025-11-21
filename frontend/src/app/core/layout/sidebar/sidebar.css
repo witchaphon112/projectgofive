@@ -1,0 +1,7 @@
+.indicator-bar {
+  display: none;
+}
+
+a.active-link .indicator-bar {
+  display: block;
+}

@@ -1,0 +1,103 @@
+<div class="flex flex-col min-h-[calc(100vh-140px)]">
+  <h1 class="text-[28px] font-semibold text-[#0794FF] mb-6">Organization Hierarchy</h1>
+
+  <div class="flex flex-col md:flex-row items-center mb-6 space-y-4 md:space-y-0 md:space-x-4">
+    <div class="relative w-full md:flex-1">
+      <app-search-input (searchChange)="onSearch($event)"></app-search-input>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-4">
+    <div class="px-6 py-2 border-gray-200">
+      <h2 class="text-lg text-gray-600 m-0">Organization Chart</h2>
+      <p class="text-xs text-gray-400">View your company structure</p>
+    </div>
+
+    <div class="p-6 overflow-x-auto min-h-[400px]">
+
+      @if (isLoading()) {
+        <div class="flex flex-col items-center justify-center h-64 text-gray-400">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0794FF] mb-2"></div>
+          <p class="text-sm">Loading...</p>
+        </div>
+      }
+
+      @if (!isLoading() && !filteredOrgChart()) {
+        <div class="flex flex-col items-center justify-center h-64 text-gray-500 text-sm">
+          <mat-icon class="text-6xl text-gray-300 mb-4">account_tree</mat-icon>
+          
+          @if (searchQuery()) {
+            <p>No results found for "{{ searchQuery() }}"</p>
+            <button 
+              (click)="searchQuery.set('')"
+              class="mt-4 px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md text-sm font-medium transition-colors">
+              Clear Search
+            </button>
+          } @else {
+            <p>No Organization Chart Found</p>
+            <button 
+              (click)="generateData()" 
+              [disabled]="!canGenerate"
+              class="mt-4 px-6 py-2 rounded-md text-sm font-medium transition-colors"
+              [ngClass]="{
+                'bg-[#4A85F6] hover:bg-[#335daa] text-white': canGenerate,
+                'bg-gray-300 text-gray-500 cursor-not-allowed': !canGenerate
+              }">
+              Generate Demo Data
+            </button>
+          }
+        </div>
+      }
+
+      @if (!isLoading() && filteredOrgChart()) {
+        <div class="p-2">
+          <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: filteredOrgChart(), isRoot: true }"></ng-container>
+        </div>
+      }
+
+    <ng-template #nodeTemplate let-employee let-isRoot="isRoot">
+      
+      <ng-container *ngIf="employee.id !== 'root-virtual'; else showChildrenOnly">
+        
+        <div class="relative">
+          <div (click)="viewEmployeeDetails(employee.id)"
+               class="group flex items-center p-3 mb-2 bg-white border border-gray-100 rounded-lg hover:bg-blue-50 hover:border-blue-200 transition-all cursor-pointer shadow-sm relative z-10">
+            
+            <div *ngIf="!isRoot" class="absolute -left-6 top-1/2 w-6 h-px bg-gray-300"></div>
+
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center text-blue-700 font-bold text-sm mr-3 border border-blue-100 shadow-inner">
+              {{ employee.name.charAt(0) }}
+            </div>
+            
+            <div>
+              <div class="text-sm font-bold text-gray-800">{{ employee.name }}</div>
+              <div class="text-xs text-gray-500 group-hover:text-blue-600">{{ employee.title }}</div>
+            </div>
+
+            <mat-icon *ngIf="employee.reports && employee.reports.length > 0" 
+                      class="ml-auto text-gray-300 text-sm w-4 h-4 flex items-center justify-center">
+                chevron_right
+            </mat-icon>
+          </div>
+
+          <div *ngIf="employee.reports && employee.reports.length > 0" class="ml-6 pl-6 border-l border-gray-100 space-y-2">
+             <div *ngFor="let report of employee.reports">
+                <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: report, isRoot: false }"></ng-container>
+             </div>
+          </div>
+
+        </div>
+
+      </ng-container>
+
+      <ng-template #showChildrenOnly>
+        <div *ngFor="let report of employee.reports">
+           <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: report, isRoot: true }"></ng-container>
+        </div>
+      </ng-template>
+
+    </ng-template>
+
+    </div>
+  </div>
+</div>

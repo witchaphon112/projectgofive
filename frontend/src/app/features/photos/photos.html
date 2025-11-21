@@ -1,0 +1,80 @@
+<div class="flex flex-col min-h-[calc(100vh-140px)]">
+  <h1 class="text-[28px] font-semibold text-[#0794FF] mb-6">Photo Library</h1>
+
+  <div class="flex flex-col md:flex-row items-center mb-6 space-y-4 md:space-y-0 md:space-x-4">
+    <div class="relative w-full md:flex-1">
+      <app-search-input (searchChange)="onSearch($event)"></app-search-input>
+    </div>
+    
+    <div class="flex items-center gap-3"> 
+      <button 
+        (click)="openUploadModal()" 
+        [disabled]="!canCreate"
+        class="flex items-center gap-1 px-5 py-2.5 rounded-md text-sm font-medium transition-colors"
+        [ngClass]="{
+          'bg-[#4A85F6] hover:bg-[#335daa] text-white': canCreate,
+          'bg-gray-300 text-gray-500 cursor-not-allowed': !canCreate
+        }">
+        Upload Photo <mat-icon class="text-lg">file_upload</mat-icon>
+      </button>
+      <app-sort-by [options]="sortOptions" (sortChange)="onSortChange($event)"></app-sort-by>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-4">
+    <div class="px-6 py-2 border-gray-200">
+      <h2 class="text-lg text-gray-600 m-0">Recent Uploads</h2>
+      <p class="text-xs text-gray-400">Manage your photo library</p>
+    </div>
+
+    <div class="p-6">
+
+    <div class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      
+      @for (photo of filteredPhotos(); track photo.id) {
+        <div class="group relative rounded-xl overflow-hidden shadow-lg transition-shadow duration-300 bg-gray-50">
+          
+          <img [src]="photo.url" [alt]="photo.title" 
+               class="w-full h-36 object-cover transition-opacity duration-300 group-hover:opacity-70">
+          
+          <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity space-x-2">
+            
+            <button (click)="viewPhoto(photo.id)" class="text-white hover:text-[#0794FF] p-2 rounded-full backdrop-blur-sm bg-black/50 transition-colors" title="View Photo">
+                <mat-icon class="w-6 h-6">visibility</mat-icon>
+            </button>
+            
+            <button 
+              (click)="deletePhoto(photo.id)" 
+              [disabled]="!canDelete"
+              class="text-white p-2 rounded-full backdrop-blur-sm transition-colors"
+              [ngClass]="{
+                'bg-black/50 hover:text-red-500': canDelete,
+                'bg-black/30 text-gray-300 cursor-not-allowed': !canDelete
+              }"
+              title="Delete Photo">
+                <mat-icon class="w-6 h-6">delete_outline</mat-icon>
+            </button>
+          </div>
+
+          <div class="p-3">
+            <h3 class="text-sm font-semibold text-gray-800 truncate" [title]="photo.title">{{ photo.title }}</h3>
+            <p class="text-xs text-gray-500 mt-1">
+              Uploaded: {{ photo.uploadDate | date: 'MMM d, y' }}
+            </p>
+          </div>
+
+        </div>
+      } @empty {
+        <div class="col-span-full py-10 text-center text-gray-500 text-sm flex flex-col items-center">
+          <mat-icon class="text-4xl text-gray-300 mb-2">photo_library</mat-icon>
+          @if (searchQuery()) {
+            <p>No photos found matching "{{ searchQuery() }}"</p>
+          } @else {
+            <p>No photos have been uploaded yet. Click "Upload Photo" to add images.</p>
+          }
+        </div>
+      }
+    </div>
+    </div>
+  </div>
+</div>

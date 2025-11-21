@@ -1,0 +1,140 @@
+<div class="flex flex-col min-h-[calc(100vh-140px)]">
+  <h1 class="text-[28px] font-semibold text-[#0794FF] mb-6">Documents</h1>
+
+  <div class="flex flex-col md:flex-row items-center mb-6 space-y-4 md:space-y-0 md:space-x-4">
+    <div class="relative w-full md:flex-1">
+      <app-search-input (searchChange)="onSearch($event)"></app-search-input>
+    </div>
+    
+    <div class="flex items-center gap-3"> 
+      <app-sort-by [options]="sortOptions" (sortChange)="onSortChange($event)"></app-sort-by>
+      <app-fillter 
+        [showStatuses]="false"
+        [showRoles]="false"
+        (filterChange)="onFilterChange($event)">
+      </app-fillter>
+    </div>
+  </div>
+
+  <div class="flex flex-col md:flex-row items-center justify-between mb-6 gap-4">
+    <div class="flex items-center gap-2">
+      <button (click)="onToolbarAction('pdf')" class="w-10 h-10 flex items-center justify-center  text-[#0794FF] rounded-lg border border-blue-100 hover:bg-blue-100" title="Export PDF">
+        <mat-icon class="text-xl">description</mat-icon>
+      </button>
+      <button (click)="onToolbarAction('expand')" class="w-10 h-10 flex items-center justify-center  text-gray-500 rounded-lg border border-gray-200 hover:bg-gray-50" title="Expand View">
+        <mat-icon class="text-xl">open_with</mat-icon>
+      </button>
+      <button (click)="onToolbarAction('notebook')" class="w-10 h-10 flex items-center justify-center text-gray-500 rounded-lg border border-gray-200 hover:bg-gray-50" title="Notebook">
+        <mat-icon class="text-xl">book</mat-icon>
+      </button>
+      <button (click)="onToolbarAction('print')" class="w-10 h-10 flex items-center justify-center text-gray-500 rounded-lg border border-gray-200 hover:bg-gray-50" title="Print">
+        <mat-icon class="text-xl">print</mat-icon>
+      </button>
+      <button 
+        (click)="onToolbarAction('delete_selection')" 
+        [disabled]="!canDelete"
+        class="w-10 h-10 flex items-center justify-center rounded-lg border"
+        [ngClass]="{
+          ' text-gray-500 border-gray-200 hover:bg-gray-50': canDelete,
+          'bg-gray-100 text-gray-400 border-gray-100 cursor-not-allowed': !canDelete
+        }"
+        title="Delete Selected">
+        <mat-icon class="text-xl">delete</mat-icon>
+      </button>
+    </div>
+
+    <div class="flex items-center gap-3 w-full md:w-auto">
+      <div class="relative">
+        <select (change)="onPeriodChange($event)" class="appearance-none bg-gray-100 border border-gray-200 text-gray-500 py-2.5 pl-4 pr-24 rounded-lg text-sm focus:outline-none cursor-pointer">
+          <option value="all">This Month</option>
+          <option value="last_month">Last Month</option>
+        </select>
+        <mat-icon class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none text-base">keyboard_arrow_down</mat-icon>
+      </div>
+
+      <div class="relative">
+        <select (change)="onTypeChange($event)" class="appearance-none bg-gray-100 border border-gray-200 text-gray-500 py-2.5 pl-2 pr-24 rounded-md text-sm focus:outline-none cursor-pointer">
+          <option value="document">Documents</option>
+          <option value="image">Images</option>
+        </select>
+        <mat-icon class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none text-base">keyboard_arrow_down</mat-icon>
+      </div>
+      <button 
+        (click)="openAddDocument()" 
+        [disabled]="!canCreate"
+        class="w-14 h-14 flex items-center justify-center rounded-md shadow-md transition-all"
+        [ngClass]="{
+          'bg-[#4A85F6] hover:bg-[#3b5bdb] text-white shadow-blue-200': canCreate,
+          'bg-gray-300 text-gray-500 cursor-not-allowed shadow-none': !canCreate
+        }">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-4">
+    <div class="px-6 py-2 border-gray-200">
+      <h2 class="text-lg text-gray-600 m-0">List of documents</h2>
+      <p class="text-xs text-gray-400">Lorem ipsum lorem uojuhn </p>
+    </div>
+
+    <div class="divide-y divide-gray-100">
+      @for (doc of filteredDocuments(); track doc.id) {
+        <div class="flex flex-col md:flex-row items-start md:items-center px-6 py-4 hover:bg-gray-50 transition-colors">
+          
+          <div class="flex-shrink-0 mr-4 mb-4 md:mb-0">
+            <div class="w-12 h-12 bg-[#EEF2FF] text-[#4C6EF5] rounded-xl flex items-center justify-center">
+              <mat-icon class="text-2xl">description</mat-icon>
+            </div>
+          </div>
+
+          <div class="flex-1 min-w-0 mr-4">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-start gap-2">
+              <div>
+                <h3 class="text-sm ml-10 font-semibold text-gray-900">{{ doc.title }}</h3>
+                <p class="text-xs ml-10 text-gray-400 mt-0.5">{{ doc.createdDate | date: 'd MMM, y' }}</p>
+              </div>
+              <p class="text-xs ml-24 text-gray-400 md:max-w-md truncate md:whitespace-normal line-clamp-1 md:line-clamp-2">
+                {{ doc.description }}
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 mt-4 md:mt-0 ml-auto">
+            <button 
+              (click)="onEdit(doc.id)" 
+              [disabled]="!canEdit"
+              class="inline-flex items-center justify-center p-2 rounded transition-colors"
+              [ngClass]="{
+                'text-[#C5CEE0] hover:bg-gray-100 hover:text-[#0794FF]': canEdit,
+                'text-[#C5CEE0] cursor-not-allowed opacity-30': !canEdit
+              }"
+              title="Edit">
+              <mat-icon class="text-xl">edit</mat-icon>
+            </button>
+            <button 
+              (click)="onDelete(doc.id)" 
+              [disabled]="!canDelete"
+              class="inline-flex items-center justify-center p-2 rounded transition-colors ml-2"
+              [ngClass]="{
+                'text-[#C5CEE0] hover:bg-gray-100 hover:text-red-600': canDelete,
+                'text-[#C5CEE0] cursor-not-allowed opacity-30': !canDelete
+              }"
+              title="Delete">
+              <mat-icon class="text-xl">delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      } @empty {
+        <div class="px-6 py-12 text-center text-gray-500 text-sm flex flex-col items-center">
+          <mat-icon class="text-4xl text-gray-300 mb-2">folder_off</mat-icon>
+          @if (searchQuery()) {
+            <p>No documents found matching "{{ searchQuery() }}"</p>
+          } @else {
+            <p>No documents found</p>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

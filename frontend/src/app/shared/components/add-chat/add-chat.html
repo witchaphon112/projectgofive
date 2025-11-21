@@ -1,0 +1,37 @@
+<div class="w-[400px] max-w-[90vw] h-[500px] flex flex-col bg-white rounded-xl overflow-hidden">
+  
+  <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+    <h2 class="text-lg font-bold text-gray-800">New Chat</h2>
+    <button (click)="close()" class="text-gray-400 hover:text-gray-600 rounded-full p-1 hover:bg-gray-200 transition">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="p-4 pb-2">
+    <div class="relative">
+      <mat-icon class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">search</mat-icon>
+      <input type="text" (input)="onSearch($event)" placeholder="Search people..." 
+             class="w-full pl-9 pr-4 py-2 bg-gray-100 border-none rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+    </div>
+  </div>
+
+  <div class="flex-1 overflow-y-auto p-2 space-y-1">
+    @for (user of filteredUsers(); track user.id) {
+      <button (click)="selectUser(user)" 
+              class="w-full flex items-center p-3 hover:bg-blue-50 rounded-lg transition-colors text-left group">
+        
+        <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold mr-3 group-hover:bg-blue-200 transition-colors">
+          {{ user.firstName.charAt(0) }}
+        </div>
+
+        <div>
+          <div class="text-sm font-semibold text-gray-800">{{ user.firstName }} {{ user.lastName }}</div>
+          <div class="text-xs text-gray-500">{{ user.role }}</div>
+        </div>
+      </button>
+    } @empty {
+      <div class="text-center text-gray-400 mt-10 text-sm">No users found.</div>
+    }
+  </div>
+
+</div>
