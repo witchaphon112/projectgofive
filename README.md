@@ -10,9 +10,9 @@ git clone [https://github.com/witchaphon112/projectgofive.git](https://github.co
 cd projectgofive
 
 2. Backend (.NET API)
-   เปิด Terminal ใหม่ แล้วเข้าไปที่โฟลเดอร์ backend:
-   cd backend
-   dotnet ef database update
+เปิด Terminal ใหม่ แล้วเข้าไปที่โฟลเดอร์ backend:
+cd backend
+dotnet ef database update
 
 รัน Backend Server:
 เชื่อมกับ AWS แล้ว เเต่ดึงข้อมูลapi จะช้านิดหน่อย
@@ -21,8 +21,8 @@ dotnet run
 Backend API: http://localhost:5001
 
 3. Frontend (Angular)
-   เปิด Terminal อีกตัว แล้วเข้าไปที่โฟลเดอร์ frontend:
-   cd frontend
+เปิด Terminal อีกตัว แล้วเข้าไปที่โฟลเดอร์ frontend:
+cd frontend
 
 ติดตั้ง Dependencies
 npm install
