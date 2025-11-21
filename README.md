@@ -19,7 +19,7 @@ Git
 
 1. Clone Project
 
-git clone https://github.com/witchaphon112/projectgofive.git
+git clone [https://github.com/witchaphon112/projectgofive.git](https://github.com/witchaphon112/projectgofive.git)
 cd projectgofive
 
 2. Start Database (Docker)
@@ -34,9 +34,8 @@ cd projectgofive
    dotnet ef database update
 
 รัน Backend Server:
-dotnet watch run
+dotnet run
 Backend API: http://localhost:5001
-Swagger UI: http://localhost:5001/swagger
 
 4. Frontend (Angular)
    เปิด Terminal อีกตัว แล้วเข้าไปที่โฟลเดอร์ frontend:
@@ -70,10 +69,3 @@ HR Admin
 username: ADminhr
 password: 012323
 ทำได้แค่ดูข้อมูลต่างๆ
-
-Project Structure
-projectgofive/
-├── backend/ # .NET Core Web API Project
-├── frontend/ # Angular Project
-├── docker-compose.yml # Database Configuration (MSSQL)
-└── README.md # Manual
